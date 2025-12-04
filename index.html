@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Roue Mystère – Salon de Tatouage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background: #050508;
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .app {
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: radial-gradient(circle at top, #222 0, #111 55%, #050508 100%);
+      border-radius: 24px;
+      padding: 24px 18px 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto 24px;
+    }
+
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),
+                  0 16px 30px rgba(0, 0, 0, 0.8);
+      background-image: conic-gradient(
+        from 0deg,
+        #c4a67a 0deg 30deg,
+        #2e2b34 30deg 60deg,
+        #c4a67a 60deg 90deg,
+        #2e2b34 90deg 120deg,
+        #c4a67a 120deg 150deg,
+        #2e2b34 150deg 180deg,
+        #c4a67a 180deg 210deg,
+        #2e2b34 210deg 240deg,
+        #c4a67a 240deg 270deg,
+        #2e2b34 270deg 300deg,
+        #c4a67a 300deg 330deg,
+        #2e2b34 330deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .wheel::after {
+      content: "";
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #444 0, #111 70%);
+      border: 2px solid rgba(255, 255, 255, 0.32);
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
+    }
+
+    .pointer {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-bottom: 22px solid #f5f5f5;
+      filter: drop-shadow(0 4px 4px rgba(0,0,0,0.7));
+    }
+
+    .spin-btn {
+      margin-top: 4px;
+      appearance: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: linear-gradient(135deg, #f5e0ba, #c4a67a);
+      color: #111;
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.75);
+      transition: transform 0.13s ease, box-shadow 0.13s ease, opacity 0.13s ease;
+    }
+
+    .spin-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 8px 14px rgba(0,0,0,0.7);
+      opacity: 0.9;
+    }
+
+    .spin-btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .result {
+      margin-top: 20px;
+      min-height: 70px;
+    }
+
+    .result-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .result-text {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    .hint {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.7;
+      margin-bottom: 12px;
+    }
+
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    @media (max-width: 480px) {
+      .wheel-wrapper {
+        width: 230px;
+        height: 230px;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <div class="badge">
+        <span class="dot"></span>
+        Dernier jour du salon
+        <span class="dot"></span>
+      </div>
+      <h1>Roue Mystère</h1>
+      <p class="subtitle">Scanne, tourne, et laisse le hasard choisir ta récompense.</p>
+
+      <div class="wheel-wrapper">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel"></div>
+      </div>
+
+      <button class="spin-btn" id="spinButton">Lancer la roue</button>
+
+      <div class="result" id="result">
+        <div class="result-title">Prêt ?</div>
+        <div class="result-text">
+          Appuie sur “Lancer la roue” et viens me montrer ton résultat au comptoir.
+        </div>
+      </div>
+
+      <div class="hint">
+        Une seule utilisation par personne · Offre valable uniquement aujourd’hui · Certaines récompenses sont très rares. ✶
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const rewards = [
+      {
+        label: "-10% sur un print A5",
+        description: "Tu bénéficies de -10% sur un print format A5 de ton choix.",
+        weight: 18
+      },
+      {
+        label: "-10% sur un print A4",
+        description: "Tu bénéficies de -10% sur un print format A4.",
+        weight: 16
+      },
+      {
+        label: "-5% sur un print A3",
+        description: "Tu bénéficies de -5% sur un print format A3.",
+        weight: 14
+      },
+      {
+        label: "Signature personnalisée offerte",
+        description: "Je signe et personnalise ton print à la main, gratuitement.",
+        weight: 14
+      },
+      {
+        label: "Sticker offert",
+        description: "Tu repars avec un sticker offert, en plus de ton achat.",
+        weight: 10
+      },
+      {
+        label: "Mini-print offert (avec A4 / A3)",
+        description: "Un mini-print est offert pour l’achat d’un print A4 ou A3.",
+        weight: 8
+      },
+      {
+        label: "-15% sur un print A4",
+        description: "Tu bénéficies de -15% sur un print format A4.",
+        weight: 6
+      },
+      {
+        label: "-10% sur un print A3",
+        description: "Tu bénéficies de -10% sur un print format A3.",
+        weight: 5
+      },
+      {
+        label: "Format supérieur au même prix",
+        description: "Tu passes au format supérieur pour le même prix (selon stock).",
+        weight: 4
+      },
+      {
+        label: "Pack Final Day (avec A3)",
+        description: "Pour l’achat d’un A3, tu reçois un mini-print + un sticker.",
+        weight: 3
+      },
+      {
+        label: "-25% sur un print A3",
+        description: "Tu bénéficies de -25% sur un print format A3.",
+        weight: 2
+      },
+      {
+        label: "🎫 GOLDEN TICKET : 1 affiche offerte",
+        description: "Golden Ticket ! 1 affiche offerte, sans minimum d’achat. Code à présenter : G.TICKET-" + Math.floor(Math.random() * 9999),
+        weight: 1
+      }
+    ];
+
+    const wheel = document.getElementById("wheel");
+    const spinButton = document.getElementById("spinButton");
+    const resultBox = document.getElementById("result");
+    const resultTitle = resultBox.querySelector(".result-title");
+    const resultText = resultBox.querySelector(".result-text");
+
+    let isSpinning = false;
+    let currentRotation = 0;
+
+    const segments = rewards.length;
+    const segmentAngle = 360 / segments;
+
+    function pickWeightedReward() {
+      const totalWeight = rewards.reduce((sum, r) => sum + r.weight, 0);
+      let random = Math.random() * totalWeight;
+      for (let i = 0; i < rewards.length; i++) {
+        random -= rewards[i].weight;
+        if (random <= 0) {
+          return { reward: rewards[i], index: i };
+        }
+      }
+      return { reward: rewards[rewards.length - 1], index: rewards.length - 1 };
+    }
+
+    function spin() {
+      if (isSpinning) return;
+      isSpinning = true;
+      spinButton.disabled = true;
+
+      const { reward, index } = pickWeightedReward();
+
+      const targetAngle = 360 - (index * segmentAngle + segmentAngle / 2);
+
+      const extraTurns = 5 + Math.floor(Math.random() * 3);
+      const finalRotation = currentRotation + extraTurns * 360 + targetAngle;
+
+      wheel.style.transform = `rotate(${finalRotation}deg)`;
+
+      const duration = 4000;
+
+      setTimeout(() => {
+        currentRotation = finalRotation % 360;
+        isSpinning = false;
+        spinButton.disabled = false;
+
+        resultTitle.textContent = reward.label;
+        resultText.textContent = reward.description;
+      }, duration + 100);
+    }
+
+    spinButton.addEventListener("click", spin);
+  </script>
+</body>
+</html>
