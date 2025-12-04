@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Roue Mystère – Salon de Tatouage</title>
+  <title>Roue Mystère – Événement Inkland</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
@@ -199,11 +199,11 @@
     <div class="card">
       <div class="badge">
         <span class="dot"></span>
-        Dernier jour du salon
+        Événement spécial Inkland
         <span class="dot"></span>
       </div>
       <h1>Roue Mystère</h1>
-      <p class="subtitle">Scanne, tourne, et laisse le hasard choisir ta récompense.</p>
+      <p class="subtitle">Tourne la roue et découvre ta récompense ✨</p>
 
       <div class="wheel-wrapper">
         <div class="pointer"></div>
@@ -215,12 +215,12 @@
       <div class="result" id="result">
         <div class="result-title">Prêt ?</div>
         <div class="result-text">
-          Appuie sur “Lancer la roue” et viens me montrer ton résultat au comptoir.
+          Clique sur “Lancer la roue” et montre-moi ton résultat au comptoir.
         </div>
       </div>
 
       <div class="hint">
-        Une seule utilisation par personne · Offre valable uniquement aujourd’hui · Certaines récompenses sont très rares. ✶
+        Une seule utilisation par personne · Certaines récompenses sont très rares.
       </div>
     </div>
   </div>
@@ -234,57 +234,57 @@
       },
       {
         label: "-10% sur un print A4",
-        description: "Tu bénéficies de -10% sur un print format A4.",
+        description: "Tu bénéficies de -10% sur un print format A4 de ton choix.",
         weight: 16
       },
       {
         label: "-5% sur un print A3",
-        description: "Tu bénéficies de -5% sur un print format A3.",
+        description: "Tu bénéficies de -5% sur un print format A3 de ton choix.",
         weight: 14
       },
       {
-        label: "Signature personnalisée offerte",
-        description: "Je signe et personnalise ton print à la main, gratuitement.",
+        label: "10€ offert pour l’achat d’une carte cadeau de 100€",
+        description: "Tu bénéficies de 10€ offert pour l’achat d’une carte cadeau valide sur prints et projets tatouage.",
         weight: 14
       },
       {
-        label: "Sticker offert",
-        description: "Tu repars avec un sticker offert, en plus de ton achat.",
+        label: "-15% sur un print A5",
+        description: "Tu bénéficies de -15% sur un print format A5 de ton choix.",
         weight: 10
       },
       {
-        label: "Mini-print offert (avec A4 / A3)",
-        description: "Un mini-print est offert pour l’achat d’un print A4 ou A3.",
+        label: "-15% sur un print A4",
+        description: "Tu bénéficies de -15% sur un print format A4 de ton choix.",
         weight: 8
       },
       {
-        label: "-15% sur un print A4",
-        description: "Tu bénéficies de -15% sur un print format A4.",
+        label: "-10% sur un print A3",
+        description: "Tu bénéficies de -10% sur un print format A3 de ton choix.",
         weight: 6
       },
       {
-        label: "-10% sur un print A3",
-        description: "Tu bénéficies de -10% sur un print format A3.",
+        label: "20€ offert pour l’achat d’une carte cadeau de 100€",
+        description: "Tu bénéficies de 20€ offert pour l’achat d’une carte cadeau valide sur prints et projets tatouage.",
         weight: 5
       },
       {
-        label: "Format supérieur au même prix",
-        description: "Tu passes au format supérieur pour le même prix (selon stock).",
+        label: "-25% sur un print A5",
+        description: "Tu bénéficies de -25% sur un print format A5 de ton choix.",
         weight: 4
       },
       {
-        label: "Pack Final Day (avec A3)",
-        description: "Pour l’achat d’un A3, tu reçois un mini-print + un sticker.",
+        label: "-25% sur un print A4",
+        description: "Tu bénéficies de -25% sur un print format A4 de ton choix.",
         weight: 3
       },
       {
-        label: "-25% sur un print A3",
-        description: "Tu bénéficies de -25% sur un print format A3.",
+        label: "-20% sur un print A3",
+        description: "Tu bénéficies de -20% sur un print format A3.",
         weight: 2
       },
       {
         label: "🎫 GOLDEN TICKET : 1 affiche offerte",
-        description: "Golden Ticket ! 1 affiche offerte, sans minimum d’achat. Code à présenter : G.TICKET-" + Math.floor(Math.random() * 9999),
+        description: "Golden Ticket ! 1 affiche offerte. Code à présenter : G.TICKET-" + Math.floor(Math.random() * 9999),
         weight: 1
       }
     ];
@@ -321,22 +321,18 @@
       const { reward, index } = pickWeightedReward();
 
       const targetAngle = 360 - (index * segmentAngle + segmentAngle / 2);
-
       const extraTurns = 5 + Math.floor(Math.random() * 3);
       const finalRotation = currentRotation + extraTurns * 360 + targetAngle;
 
       wheel.style.transform = `rotate(${finalRotation}deg)`;
 
-      const duration = 4000;
-
       setTimeout(() => {
         currentRotation = finalRotation % 360;
         isSpinning = false;
         spinButton.disabled = false;
-
         resultTitle.textContent = reward.label;
         resultText.textContent = reward.description;
-      }, duration + 100);
+      }, 4100);
     }
 
     spinButton.addEventListener("click", spin);
